@@ -1,0 +1,58 @@
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+
+// Get command-line arguments
+const args = process.argv.slice(2);
+const savePath = args.includes('-p') ? args[args.indexOf('-p') + 1] : 'data'; // Default to 'data'
+
+// The last argument should be the URL
+const inputUrl = args[args.length - 1];
+
+// Create directory if it doesn't exist
+function createDirectory(dir) {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+// Function to download an image
+async function downloadImage(imgSrc) {
+    const imgName = path.basename(imgSrc);
+    const imgPath = path.join(savePath, imgName);
+    createDirectory(savePath);
+
+    try {
+        const response = await axios({
+            url: imgSrc.startsWith('http') ? imgSrc : new URL(imgSrc, inputUrl).href,
+            method: 'GET',
+            responseType: 'stream',
+        });
+
+        const writer = fs.createWriteStream(imgPath);
+        response.data.pipe(writer);
+        writer.on('finish', () => console.log(`Downloaded: ${imgPath}`));
+    } catch (error) {
+        console.error(`Failed to download image ${imgSrc}: ${error.message}`);
+    }
+}
+
+// Function to fetch and process a URL
+async function processPage(pageUrl) {
+    try {
+        const { data } = await axios.get(pageUrl);
+        
+        // Extract and download images
+        const imgSrcs = data.match(/<img[^>]+src="([^">]+)"/g)?.map(img => img.match(/src="([^">]+)/)[1]) || [];
+        imgSrcs.forEach(downloadImage);
+    } catch (error) {
+        console.error(`Error processing URL ${pageUrl}: ${error.message}`);
+    }
+}
+
+// Start the process
+if (!inputUrl) {
+    console.error('Please provide a URL.');
+    process.exit(1);
+}
+
+createDirectory(savePath); // Create the save directory
+processPage(inputUrl);
