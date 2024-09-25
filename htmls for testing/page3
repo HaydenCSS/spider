@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 3</title>
+</head>
+<body>
+    <h1>Page 3</h1>
+    <img src="image 3.jpeg" alt="Image 3">
+    <p>This is the third page. Click the link below to go to the next page.</p>
+    <a href="page4.html">Go to Page 4</a>
+</body>
+</html>
