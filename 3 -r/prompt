@@ -1,1 +1,3 @@
 node spider.js -r -p images https://en.wikipedia.org/wiki/Weezer
+
+node spider.js -r -p images https://hhs.daymap.net/daymap/timetable/timetable.aspx
