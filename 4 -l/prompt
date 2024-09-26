@@ -4,5 +4,5 @@ node spider.js -r -p images -l 2 http://127.0.0.1:5500/spider-project/page1.html
 wiki weezer
 node spider.js -r -p images -l 2 https://en.wikipedia.org/wiki/Weezer
 
-node spider.js -r -p images -l 2 https://sites.google.com/42adel.org.au/webscraping
+node spider.js -p images https://sites.google.com/42adel.org.au/webscraping
 
